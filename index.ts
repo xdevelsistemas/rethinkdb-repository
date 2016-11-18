@@ -2,9 +2,8 @@ import * as r from 'rethinkdb'
 import * as shortid from 'shortid'
 
 export namespace Database {
-    export interface IModel {
-        id: string
-        dataInclusao: Date
+    export interface IModel<T> {
+        id: T
     }
 
     export interface IRepository {
@@ -24,16 +23,14 @@ export namespace Database {
         updateRange(data: Array<any>): Promise<r.WriteResult>
     }
 
-    export class Model {
+    export class Model implements IModel<string> {
         id: string
-        dataInclusao: Date
         constructor(id?: string) {
             if (!id) {
                 this.id = Model.generateId()
             } else {
                 this.id = id
             }
-            this.dataInclusao = new Date()
         }
         static generateId(): string {
             shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@')
