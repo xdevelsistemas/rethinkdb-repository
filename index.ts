@@ -11,8 +11,8 @@ export namespace Database {
         database: r.Db
         tableName: string
         createDatabase(databaseName: string): Promise<r.CreateResult>
-        useDatabase(databaseName: string): void
-        useTable(tableName: string): void
+        useDatabase(databaseName: string): IRepository
+        useTable(tableName: string): IRepository
         dbExists(databaseName: string): Promise<boolean>
         tableCreate(): Promise<r.CreateResult>
         tableDrop(): Promise<r.DropResult>
@@ -99,8 +99,9 @@ export namespace Database {
          * 
          * @memberOf Repository
          */
-        useDatabase(databaseName: string): void {
+        useDatabase(databaseName: string): IRepository {
             this.database = r.db(databaseName)
+            return this
         }
         /**
          * 
@@ -109,8 +110,9 @@ export namespace Database {
          * 
          * @memberOf Repository
          */
-        useTable(tableName: string): void {
+        useTable(tableName: string): IRepository {
             this.tableName = tableName
+            return this
         }
         /**
          * Verify if the database exists 
