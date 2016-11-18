@@ -12,6 +12,7 @@ export namespace Database {
         tableName: string
         useDatabase(databaseName: string): void
         useTable(tableName: string): void
+        dbExists(databaseName: string): Promise<boolean>
         tableCreate(): Promise<r.CreateResult>
         tableDrop(): Promise<r.DropResult>
         filter(filter: any): Promise<r.Cursor>
@@ -95,6 +96,23 @@ export namespace Database {
          */
         useTable(tableName: string): void {
             this.tableName = tableName
+        }
+        /**
+         * Verify if the database exists 
+         * 
+         * @param {string} databaseName
+         * @returns {Promise<boolean>}
+         * 
+         * @memberOf Repository
+         */
+        dbExists(databaseName: string): Promise<boolean> {
+            return this.getConnection().then(connection => {
+                return r.dbList()
+                    .run(connection)
+                    .then((dbs) => {
+                        return dbs.filter(d => d === databaseName).length > 0
+                    })
+            })
         }
         /**
          * Create {tableName} in database
