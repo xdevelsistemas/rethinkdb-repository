@@ -10,11 +10,13 @@ export namespace Database {
         connectionOptions: r.ConnectionOptions
         database: r.Db
         tableName: string
+        createDatabase(databaseName: string): Promise<r.CreateResult>
         useDatabase(databaseName: string): void
         useTable(tableName: string): void
         dbExists(databaseName: string): Promise<boolean>
         tableCreate(): Promise<r.CreateResult>
         tableDrop(): Promise<r.DropResult>
+        tableList(): Promise<Array<string>>
         filter(filter: any): Promise<r.Cursor>
         get(id: string): Promise<r.Cursor>
         getAll(): Promise<r.Cursor>
@@ -78,6 +80,19 @@ export namespace Database {
             this.useTable(tableName)
         }
         /**
+         * Creates database at current connected server
+         * 
+         * @param {string} databaseName
+         * @returns {Promise<r.CreateResult>}
+         * 
+         * @memberOf Repository
+         */
+        createDatabase(databaseName: string): Promise<r.CreateResult> {
+            return this.getConnection().then(connection => {
+                return r.dbCreate(databaseName).run(connection)
+            })
+        }
+        /**
          * Changes de database being used
          * 
          * @param {string} databaseName
@@ -138,6 +153,18 @@ export namespace Database {
             return this.getConnection().then(connection => {
                 return this.database.tableDrop(tableName || this.tableName)
                     .run(connection)
+            })
+        }
+        /**
+         * Get list of tables names at current database
+         * 
+         * @returns {Promise<Array<string>>}
+         * 
+         * @memberOf Repository
+         */
+        tableList(): Promise<Array<string>> {
+            return this.getConnection().then(connection => {
+                return this.database.tableList().run(connection)
             })
         }
         /**
