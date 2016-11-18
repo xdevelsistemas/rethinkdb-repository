@@ -10,6 +10,7 @@ export namespace Database {
         connectionOptions: r.ConnectionOptions
         database: r.Db
         tableName: string
+        useDatabase(databaseName: string): void
         tableCreate(): Promise<r.CreateResult>
         tableDrop(): Promise<r.DropResult>
         get(id: string): Promise<r.Cursor>
@@ -47,7 +48,7 @@ export namespace Database {
          */
         connectionOptions: r.ConnectionOptions
         /**
-         * 
+         * Default database is passed at {connectionOptions}
          * 
          * @type {r.Db}
          * @memberOf Repository
@@ -70,8 +71,18 @@ export namespace Database {
          */
         constructor(connectionOptions: r.ConnectionOptions, tableName: string) {
             this.connectionOptions = connectionOptions
-            this.database = r.db(this.connectionOptions.db)
             this.tableName = tableName
+            this.useDatabase(this.connectionOptions.db)
+        }
+        /**
+         * Changes de database being used
+         * 
+         * @param {string} databaseName
+         * 
+         * @memberOf Repository
+         */
+        useDatabase(databaseName: string): void {
+            this.database = r.db(databaseName)
         }
         /**
          * Create {tableName} in database
