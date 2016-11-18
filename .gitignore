@@ -36,5 +36,3 @@ node_modules
 .idea/
 out/
 rethinkdb_data/
-*.js
-*.js.map
