@@ -1,6 +1,6 @@
 {
   "name": "rethinkdb-repository",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Implementation of Repository pattern for RethinkDB",
   "main": "/build/app/Database.js",
   "scripts": {
