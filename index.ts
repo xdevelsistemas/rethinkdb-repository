@@ -13,6 +13,7 @@ export namespace Database {
         useDatabase(databaseName: string): void
         tableCreate(): Promise<r.CreateResult>
         tableDrop(): Promise<r.DropResult>
+        filter(filter: any): Promise<r.Cursor>
         get(id: string): Promise<r.Cursor>
         getAll(): Promise<r.Cursor>
         exec<T>(fn: (table: r.Table) => any): Promise<T>
@@ -91,9 +92,9 @@ export namespace Database {
          * 
          * @memberOf Repository
          */
-        tableCreate(): Promise<r.CreateResult> {
+        tableCreate(tableName?: string): Promise<r.CreateResult> {
             return this.getConnection().then(connection => {
-                return this.database.tableCreate(this.tableName)
+                return this.database.tableCreate(tableName || this.tableName)
                     .run(connection)
             })
         }
@@ -104,9 +105,24 @@ export namespace Database {
          * 
          * @memberOf Repository
          */
-        tableDrop(): Promise<r.DropResult> {
+        tableDrop(tableName?: string): Promise<r.DropResult> {
             return this.getConnection().then(connection => {
-                return this.database.tableDrop(this.tableName)
+                return this.database.tableDrop(tableName || this.tableName)
+                    .run(connection)
+            })
+        }
+        /**
+         * Select objects from database with the specified filter
+         * 
+         * @param {*} filter
+         * @returns {Promise<r.Cursor>}
+         * 
+         * @memberOf Repository
+         */
+        filter(filter: any): Promise<r.Cursor> {
+            return this.getConnection().then(connection => {
+                return this.getTable()
+                    .filter(filter)
                     .run(connection)
             })
         }
