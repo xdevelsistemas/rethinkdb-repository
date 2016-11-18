@@ -11,6 +11,7 @@ export namespace Database {
         database: r.Db
         tableName: string
         useDatabase(databaseName: string): void
+        useTable(tableName: string): void
         tableCreate(): Promise<r.CreateResult>
         tableDrop(): Promise<r.DropResult>
         filter(filter: any): Promise<r.Cursor>
@@ -72,8 +73,8 @@ export namespace Database {
          */
         constructor(connectionOptions: r.ConnectionOptions, tableName: string) {
             this.connectionOptions = connectionOptions
-            this.tableName = tableName
             this.useDatabase(this.connectionOptions.db)
+            this.useTable(tableName)
         }
         /**
          * Changes de database being used
@@ -84,6 +85,16 @@ export namespace Database {
          */
         useDatabase(databaseName: string): void {
             this.database = r.db(databaseName)
+        }
+        /**
+         * 
+         * 
+         * @param {string} tableName
+         * 
+         * @memberOf Repository
+         */
+        useTable(tableName: string): void {
+            this.tableName = tableName
         }
         /**
          * Create {tableName} in database
