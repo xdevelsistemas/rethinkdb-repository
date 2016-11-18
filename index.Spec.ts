@@ -1,7 +1,7 @@
 import * as chai from 'chai'
 import * as chaiAsPromised from 'chai-as-promised'
 import * as util from 'gulp-util'
-import {Database} from './Database'
+import {Database} from './index'
 import * as r from 'rethinkdb'
 
 export class DatabaseTest {
